@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+
+{% block css %}
+<style>
+    #logout {
+        text-decoration: none;
+        color: black;
+        background-color: rgb(219, 161, 26);
+        padding: 6px;
+        border-radius: 5px;
+
+    }
+
+    #main_form {
+
+        height: calc(100vh - 66px);
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+
+    }
+
+    #main_form>div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        padding: 20px;
+        box-shadow: 10px 10px 10px #ebebeb;
+        row-gap: 100px;
+
+        background: rgb(238, 174, 202);
+        background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+
+    }
+
+
+
+
+    #file {
+        font-size: x-large;
+        font-family: cursive;
+        width: 309px;
+
+
+
+    }
+
+
+    #submit_btn {
+        font-size: x-large;
+        padding: 7px;
+
+        border-radius: 8px;
+        background-color: black;
+        color: white;
+        border: 3px solid white;
+        cursor: pointer;
+    }
+
+    #submit_btn:hover {
+        color:
+            rgb(0, 229, 255);
+        border: 3px solid rgb(0, 229, 255);
+
+    }
+</style>
+{% endblock css %}
+
+{% block username_logout %}
+<span id="user_email">{{username}}</span>
+<a id="logout" href="/logout">Logout</a>
+{% endblock username_logout %}
+
+{% block main %}
+<form id="main_form" method="post" enctype="multipart/form-data" action="uploadfile_submit">
+    {%csrf_token%}
+    <div>
+        <!-- File type not mentioned in assignment -->
+        <span><input id="file" type="file" placeholder="Select your file" name="file_x" required></span>
+        <input id="submit_btn" type="submit" value="Upload">
+    </div>
+
+</form>
+{% endblock main %}
+
+{% block script %}
+<script>
+        '{% for message in messages %}'
+        alert('{{ message }}')
+        '{% endfor %}'
+
+</script>
+{% endblock script %}

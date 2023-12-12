@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #brand_logo {
+            height: 60px;
+            cursor: pointer;
+
+        }
+
+        header {
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            background-color: #ebebeb;
+            align-items: center;
+            padding: 8px 30px;
+            font-size: x-large;
+        }
+
+        
+    </style>
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+
+    <header>
+        <img onclick="window.location.href='/'" src="/static/brand_logo.png" alt="logo" id="brand_logo">
+
+
+        {% block username_logout %}{% endblock %}
+
+    </header>
+    <div id="main">
+
+        {% block main %}{% endblock %}
+
+
+
+    </div>
+    {% block script %}{% endblock %}
+</body>
+
+</html>

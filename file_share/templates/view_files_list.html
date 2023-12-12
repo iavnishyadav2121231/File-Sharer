@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+
+
+{% block css %}
+<style>
+    #logout {
+        text-decoration: none;
+        color: black;
+        background-color: rgb(219, 161, 26);
+        padding: 6px;
+        border-radius: 5px;
+
+    }
+
+
+
+
+
+    #main {
+        margin-top: 20px;
+        height: calc(100% - 66px - 20px);
+
+        overflow: scroll;
+        font-family: cursive;
+    }
+
+    #main::-webkit-scrollbar {
+        display: none;
+
+    }
+
+    .file_cont {
+        background: linear-gradient(111.1deg, rgb(208, 247, 100) -4.8%, rgb(115, 255, 243) 70.7%, rgb(123, 158, 255));
+        margin: auto;
+        border-radius: 7px;
+        width: 80%;
+        padding: 12px;
+        margin-top: 10px;
+        align-items: center;
+
+        display: flex;
+        justify-content: space-between;
+    }
+
+
+    .links {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+
+
+    }
+
+
+
+    .download {
+
+        padding: 3px;
+        text-decoration: none;
+        border-radius: 3px;
+        color: #ffffff;
+        background-color: black;
+    }
+
+    .file_cont>a>img {
+        height: 35px;
+    }
+
+    .share {
+        height: 25px;
+        cursor: pointer;
+
+    }
+
+    .file_name {
+        font-family: monospace;
+        font-size: larger;
+    }
+
+    #email {
+        width: 400px;
+        font-size: large;
+    }
+
+    .share_btn {
+        border: none;
+        background-color: black;
+        border-radius: 4px;
+        color: white;
+        font-size: large;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    #myUL {
+        list-style-type: none;
+        margin: auto;
+        margin-top: 10px;
+        width: 80%;
+    }
+
+
+    #myUL li {
+        border: 3px solid white;
+        margin-top: -1px;
+        background: radial-gradient(circle, rgba(79, 141, 31, 1) 9%, rgba(255, 249, 0, 1) 100%);
+        padding: 10px;
+        font-size: 15px;
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 7px;
+
+    }
+
+    #myUL li:hover {
+        border-color: aqua;
+    }
+
+    #file_hid {
+        display: none;
+    }
+
+    #myUL li span {
+        cursor: pointer;
+    }
+
+    #myUL li a {
+        text-decoration: none;
+    }
+
+    #myUL li a:hover,
+    #myUL li span:hover {
+        color: rgb(255, 0, 136);
+    }
+</style>
+{% endblock css %}
+
+
+{% block username_logout %}
+<span id="user_email">{{username}}</span>
+<a id="logout" href="/logout">Logout</a>
+{% endblock username_logout %}
+
+
+{% block main %}
+<!-- list -->
+{% for x in files %}
+<div class="file_cont">
+    <span>Owned</span>
+    <span class="file_name">{{ x.file | cut:'files/' }}</span>
+    <span class="links">
+        <a href='/media/{{ x.file }}' class="download">Download</a>
+        <img onclick="open_share_form('{{ x.file }}')" class="share" src="/static/share_icon.png" alt="Share">
+        <a href="/delete/{{x.file}}"><img class="share" src="/static/delete.png" alt="Delete"></a>
+
+    </span>
+</div>
+
+{% endfor %}
+
+{% for x in shared %}
+<div class="file_cont">
+
+    <a href="/profile/{{ x.share_ref.username }}/" target='_blank'><img src="/static/profile_small.png"
+            alt="Profile"></a>
+
+    <span class="file_name">{{ x.file_Ref.file | cut:'files/' }}</span>
+    <span class="links">
+        <a href='/media/{{ x.file_Ref.file }}' class="download">Download</a>
+    </span>
+</div>
+{% endfor %}
+{% endblock main %}
+
+{% block script %}
+<script>
+    function open_share_form(file_loc) {
+
+        let du = document.getElementById("main")
+        du.innerHTML = `<form class="file_cont" action="/share/" method="get">
+            {% csrf_token %}
+            <input oninput="filter_search(event)" id="email" type="email" maxlength="35" placeholder="Filter..." name="email" required>
+            <input id="file_hid"   type="text" value=${file_loc}   name="file" required>
+            <input class="share_btn" id="submit-btn" type="submit" value="Share">
+            </form><ul id="myUL">
+                
+                {%for x in users%}
+
+
+            {% if x.username != username %}
+                <li> <span onclick="setText_openProfile(event)">{{x.username}}</span><a href='/profile/{{x.username}}' target='_blank'>View Profile</a></li>
+            {% endif %}
+            
+     
+            {%endfor%}
+          </ul>`
+
+    }
+
+    function filter_search(e) {
+
+
+        let input, filter, ul, li, a, i, txtValue;
+        input = e.currentTarget;
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("myUL");
+        li = ul.getElementsByTagName('li');
+
+
+        for (i = 0; i < li.length; i++) {
+
+            txtValue = li[i].firstElementChild.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "flex";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+
+    function setText_openProfile(e) {
+        let temp_inp = document.getElementById("email");
+        let temp_targ = e.currentTarget;
+        temp_inp.value = temp_targ.innerText;
+
+        li = temp_targ.parentNode.parentNode.getElementsByTagName('li');
+
+        for (i = 0; i < li.length; i++) {
+
+            li[i].style.display = "none";
+
+
+        }
+
+
+    }
+
+
+    '{% for message in messages %}'
+    alert('{{ message }}')
+    '{% endfor %}'
+
+</script>
+{% endblock script %}

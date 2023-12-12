@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+
+{% block css %}
+<style>
+    #logout {
+        text-decoration: none;
+        color: black;
+        background-color: rgb(219, 161, 26);
+        padding: 6px;
+        border-radius: 5px;
+
+    }
+
+
+    #main {
+
+        height: calc(100vh - 66px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        column-gap: 120px;
+
+    }
+
+    .main_func_icon {
+        width: 120px;
+    }
+
+    #main>a {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: x-large;
+        text-decoration: none;
+        color: black;
+        font-family: cursive;
+
+    }
+</style>
+{% endblock css %}
+
+
+{% block username_logout %}
+<span id="user_email">{{username}}</span>
+<a id="logout" href="/logout">Logout</a>
+{% endblock username_logout %}
+
+
+{% block main %}
+<a href="/uploadfile"><img class="main_func_icon" src="/static/Upload.png" alt="Upload">Upload Files</a>
+<a href="/viewfiles"><img class="main_func_icon" src="/static/Files.png" alt="Files">View Files</a>
+{% endblock main %}
